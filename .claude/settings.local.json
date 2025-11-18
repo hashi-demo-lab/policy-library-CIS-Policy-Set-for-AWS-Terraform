@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "WebFetch(domain:developer.hashicorp.com)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []

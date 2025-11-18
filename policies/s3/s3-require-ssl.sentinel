@@ -120,10 +120,7 @@ valid_bucket_policies = filter s3_bucket_policy_resources as _, res {
 	}
 }
 s3_bucket_addresses = map valid_bucket_policies as _, res {
-	res.config.bucket is defined and
-	res.config.bucket.references is defined and
-	length(res.config.bucket.references) > 1 ?
-		res.config.bucket.references[1] : ""
+	get_bucket_reference(res)
 }
 
 buckets_without_valid_policy = filter s3_bucket_resources as _, res {
@@ -138,10 +135,7 @@ bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, re
 }
 
 bucket_addresses_for_inline_policies = map bucket_policies_without_datasources as _, res {
-	res.config.bucket is defined and
-	res.config.bucket.references is defined and
-	length(res.config.bucket.references) > 1 ?
-		res.config.bucket.references[1] : ""
+	get_bucket_reference(res)
 }
 
 buckets_with_inline_policy = filter s3_bucket_resources as _, res {
