@@ -46,6 +46,10 @@ is_mfa_enabled = func(res) {
 		return false
 	}
 	return collection.find(res.config.versioning_configuration, func(config) {
+		# Check if status and its constant_value are defined before comparison
+		if config.status is not defined or config.status.constant_value is not defined {
+			return false
+		}
 		return config.status.constant_value is const.enabled and
 			config[const.mfa_delete] is defined and
 			(check_mfa_from_const(config) or check_mfa_from_refrence_var(config))
