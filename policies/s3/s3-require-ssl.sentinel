@@ -99,6 +99,15 @@ build_violation_object = func(resource_addr, module_addr, message) {
 	}
 }
 
+get_bucket_reference = func(res) {
+	if res.config.bucket is defined and
+	   res.config.bucket.references is defined and
+	   length(res.config.bucket.references) > 1 {
+		return res.config.bucket.references[1]
+	}
+	return ""
+}
+
 # Variables
 
 violations = []
