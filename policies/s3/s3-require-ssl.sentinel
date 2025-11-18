@@ -125,7 +125,11 @@ bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, re
 }
 
 bucket_addresses_for_inline_policies = map bucket_policies_without_datasources as _, res {
-	res.config.bucket.references[1]
+	if res.config.bucket.references is defined and length(res.config.bucket.references) > 1 {
+		res.config.bucket.references[1]
+	} else {
+		""
+	}
 }
 
 buckets_with_inline_policy = filter s3_bucket_resources as _, res {
