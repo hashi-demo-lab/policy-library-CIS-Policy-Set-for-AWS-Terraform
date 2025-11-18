@@ -107,7 +107,11 @@ valid_bucket_policies = filter s3_bucket_policy_resources as _, res {
 	}
 }
 s3_bucket_addresses = map valid_bucket_policies as _, res {
-	res.config.bucket.references[1]
+	if res.config.bucket.references is defined and length(res.config.bucket.references) > 1 {
+		res.config.bucket.references[1]
+	} else {
+		""
+	}
 }
 
 buckets_without_valid_policy = filter s3_bucket_resources as _, res {
@@ -115,7 +119,9 @@ buckets_without_valid_policy = filter s3_bucket_resources as _, res {
 }
 
 bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, res {
-	res.config.policy[const.references] is not defined or res.config.policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$"
+	res.config.policy[const.references] is not defined or
+	length(res.config.policy[const.references]) < 2 or
+	res.config.policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$"
 }
 
 bucket_addresses_for_inline_policies = map bucket_policies_without_datasources as _, res {
